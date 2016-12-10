@@ -34,3 +34,17 @@ Publish.Degree IN
  WHERE b.dge_id = deleted_dge_id);
 END Delete_Enrolls_in;
 / 
+
+CREATE OR REPLACE PROCEDURE show_record_Enrolls_in(
+all_degrees INTEGER;
+BEGIN
+ SELECT COUNT(*) AS All_Students INTO 
+         all_degrees FROM Degrees d , Enrolls e
+         WHERE e.degree = REF(d) GROUP BY d.deg_id;
+    
+         INSERT INTO Degree_Records VALUES 
+         (SELF.deg_id , SELF.deg_name
+          , SELF.deg_length , SELF.deg_prereq , all_degrees );
+   
+     END show_record_Enrolls_in;
+ END;
