@@ -1,0 +1,36 @@
+CREATE OR REPLACE PROCEDURE Insert_Enrolls_in(
+new_pers_id IN VARCHAR2,
+new_dge_id IN VARCHAR2) As
+student_temp REF Student_T;
+degree_temp REF Degree_T; 
+
+BEGIN
+SELECT REF(a) INTO student_temp
+FROM Student a
+WHERE a.pers_id = new_pers_id;
+
+SELECT REF(b) INTO degree_temp
+FROM Degree b
+WHERE b.dge_id = new_dge_id; 
+
+INSERT INTO Enrolls_in
+VALUES (student_temp, degree_temp);
+END Insert_Enrolls_in;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Enrolls_in(
+deleted_pers_id IN VARCHAR2,
+deleted_dge_id IN VARCHAR2) AS
+BEGIN
+DELETE FROM Enrolls_in
+WHERE
+Enrolls_in.Student IN
+(SELECT REF(a)
+FROM Student a
+WHERE a.pers_id = deleted_pers_id) AND
+Publish.Degree IN
+(SELECT REF(b)
+ FROM Degree b
+ WHERE b.dge_id = deleted_dge_id);
+END Delete_Enrolls_in;
+/ 
